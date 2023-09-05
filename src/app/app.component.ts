@@ -20,9 +20,9 @@ export class AppComponent {
   addProducts?: any[] = [];
   addProduct: any[] = [];
 
-  quantiteT:number;
-  prixHTTOTAL:number;
-  prixTTCTOTAL:number;
+  quantiteT:number = 0;
+  prixHTTOTAL:number = 0;
+  prixTTCTOTAL:number = 0;
 
   updateTotal(){
     let prix = 0
@@ -70,12 +70,20 @@ export class AppComponent {
 
   addPanier(id:number){
     if(this.getProductsById(id).quantite > 0){
-      this.addProduct = [
-        this.getProductsById(id).nom,
-        this.getProductsById(id).quantite,
-        this.getProductsById(id).prixHT,
-      ];
-      this.addProducts?.push(this.addProduct);
+      if(this.addProducts?.some(product => product[0] == this.getProductsById(id).nom,)){
+        this.addProducts?.forEach( product => {
+          if(product[0] == this.getProductsById(id).nom){
+            product[1] = product[1] + this.getProductsById(id).quantite
+          }
+        })
+      } else{
+        this.addProduct = [
+          this.getProductsById(id).nom,
+          this.getProductsById(id).quantite,
+          this.getProductsById(id).prixHT,
+        ];
+        this.addProducts?.push(this.addProduct);
+      }
       this.getProductsById(id).quantite = 0;
       this.updateTotal();
     }
